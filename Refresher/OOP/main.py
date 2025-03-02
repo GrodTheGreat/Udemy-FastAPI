@@ -1,4 +1,6 @@
 from enemy import Enemy
+from zombie import Zombie
+from ogre import Ogre
 
 # enemy1 = Enemy()
 # print(enemy1.health_points)
@@ -15,8 +17,24 @@ from enemy import Enemy
 
 # enemy1.talk()
 # enemy1.attack()
-zombie = Enemy("Zombie", 10, 3)
-zombie.attack()
+# zombie = Enemy("Zombie", 10, 3)
+# zombie.attack()
 
-big_zombie = Enemy("Big Zombie", 100, 10)
-big_zombie.attack()
+# big_zombie = Enemy("Big Zombie", 100, 10)
+# big_zombie.attack()
+
+
+def battle(enemy: Enemy):
+    enemy.talk()
+    enemy.attack()
+
+
+zombie = Zombie(10, 3)
+zombie.talk()
+zombie.spread_disease()
+
+ogre = Ogre(20, 3)
+ogre.talk()
+
+battle(zombie)
+battle(ogre)
