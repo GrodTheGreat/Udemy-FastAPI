@@ -1,6 +1,8 @@
 from enemy import Enemy
-from zombie import Zombie
+from hero import Hero
 from ogre import Ogre
+from weapon import Weapon
+from zombie import Zombie
 
 # enemy1 = Enemy()
 # print(enemy1.health_points)
@@ -46,6 +48,26 @@ def battle(enemy1: Enemy, enemy2: Enemy):
         print(f"{enemy2.get_type_of_enemy()} wins!")
 
 
+def hero_battle(hero: Hero, enemy: Enemy):
+    while hero.health_points > 0 and enemy.health_points > 0:
+        print("---------")
+        enemy.special_attack()
+        print(f"Hero: {hero.health_points} HP left")
+        print(f"{enemy.get_type_of_enemy()}: {enemy.health_points} HP left")
+        hero.attack()
+        enemy.health_points -= hero.attack_damage
+        enemy.attack()
+        hero.health_points -= enemy.attack_damage
+
+    print("---------")
+    if hero.health_points > 0:
+        print("Hero wins!")
+    if enemy.health_points > 0:
+        print(f"{enemy.get_type_of_enemy()} wins!")
+    else:
+        print("They have slain each other.")
+
+
 zombie = Zombie(10, 3)
 zombie.talk()
 zombie.spread_disease()
@@ -53,4 +75,9 @@ zombie.spread_disease()
 ogre = Ogre(20, 3)
 ogre.talk()
 
-battle(zombie, ogre)
+hero = Hero(10, 1)
+weapon = Weapon("Sword", 6)
+hero.weapon = weapon
+hero.equip_weapon()
+
+hero_battle(hero, ogre)
