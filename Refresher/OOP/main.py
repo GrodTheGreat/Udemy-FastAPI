@@ -1,17 +1,19 @@
 from enemy import Enemy
 
-enemy1 = Enemy()
-print(enemy1.health_points)
+# enemy1 = Enemy()
+# print(enemy1.health_points)
 
-enemy2 = Enemy()
-enemy2.health_points = 12
+# enemy2 = Enemy()
+# enemy2.health_points = 12
 
-enemy1.type_of_enemy = "Zombie"
-print(
-    f"{enemy1.type_of_enemy} has {enemy1.health_points} and can do an attack of {enemy1.attack_damage} damage"
-)
+# enemy1.type_of_enemy = "Zombie"
+# print(
+#     f"{enemy1.type_of_enemy} has {enemy1.health_points} and can do an attack of {enemy1.attack_damage} damage"
+# )
 
-print(enemy1.health_points)
+# print(enemy1.health_points)
 
-enemy1.talk()
-enemy1.attack()
+# enemy1.talk()
+# enemy1.attack()
+enemy = Enemy("Zombie", 10, 3)
+enemy.attack()
