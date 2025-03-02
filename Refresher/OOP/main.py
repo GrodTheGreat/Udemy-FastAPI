@@ -10,3 +10,8 @@ enemy1.type_of_enemy = "Zombie"
 print(
     f"{enemy1.type_of_enemy} has {enemy1.health_points} and can do an attack of {enemy1.attack_damage} damage"
 )
+
+print(enemy1.health_points)
+
+enemy1.talk()
+enemy1.attack()
