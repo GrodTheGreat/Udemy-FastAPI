@@ -1,8 +1,4 @@
 class Enemy:
-    type_of_enemy: str
-    health_points: int = 10
-    attack_damage: int = 1
-
     # Default/Empty Constructor. If __init__ isn't defined this is created automatically.
     # def __init__(self):
     #     pass

@@ -15,5 +15,8 @@ from enemy import Enemy
 
 # enemy1.talk()
 # enemy1.attack()
-enemy = Enemy("Zombie", 10, 3)
-enemy.attack()
+zombie = Enemy("Zombie", 10, 3)
+zombie.attack()
+
+big_zombie = Enemy("Big Zombie", 100, 10)
+big_zombie.attack()
