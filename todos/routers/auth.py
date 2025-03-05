@@ -12,14 +12,14 @@ from starlette import status
 from database import SessionLocal
 from models import User
 
-router = APIRouter()
+router = APIRouter(prefix="/auth", tags=["auth"])
 
 # This is hosted on GutHUb, assume nothing is secret lol
 SECRET_KEY = "This is pretty secret tbh"  # "secret lol"
 ALGORITHM = "HS256"
 
 bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-oauth2_bearer = OAuth2PasswordBearer(tokenUrl="token")
+oauth2_bearer = OAuth2PasswordBearer(tokenUrl="auth/token")
 
 
 class CreateUserRequest(BaseModel):
@@ -87,7 +87,7 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_bearer)]):
         )
 
 
-@router.post("/auth", status_code=status.HTTP_201_CREATED)
+@router.post("/", status_code=status.HTTP_201_CREATED)
 async def create_user(
     db: db_dependency, create_user_request: CreateUserRequest
 ):
@@ -112,7 +112,10 @@ async def login_for_access_token(
 ):
     user = authenticate_user(form_data.username, form_data.password, db)
     if not user:
-        return "Failed Authentication"
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate user",
+        )
 
     token = create_access_token(user.username, user.id, timedelta(minutes=20))
 
