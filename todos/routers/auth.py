@@ -14,8 +14,8 @@ from models import User
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
-# This is hosted on GutHUb, assume nothing is secret lol
-SECRET_KEY = "This is pretty secret tbh"  # "secret lol"
+# This is hosted on GutHub, assume nothing is secret lol
+SECRET_KEY = "This is pretty secret tbh"  # "secret" lol
 ALGORITHM = "HS256"
 
 bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -29,6 +29,7 @@ class CreateUserRequest(BaseModel):
     last_name: str
     password: str
     role: str
+    phone_number: str
 
 
 class Token(BaseModel):
@@ -102,6 +103,7 @@ async def create_user(
         hashed_password=bcrypt_context.hash(create_user_request.password),
         role=create_user_request.role,
         is_active=True,
+        phone_number=create_user_request.phone_number,
     )
 
     db.add(create_user_model)

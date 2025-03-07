@@ -18,6 +18,10 @@ class UserVerification(BaseModel):
     new_password: str = Field(min_length=6)
 
 
+class UserPhone(BaseModel):
+    new_phone: str
+
+
 def get_db():
     db = SessionLocal()
     try:
@@ -66,6 +70,24 @@ async def change_password(
     user_model.hashed_password = bcrypt_context.hash(
         user_verification.new_password
     )
+
+    db.add(user_model)
+    db.commit()
+
+
+@router.put("/phone-number", status_code=status.HTTP_204_NO_CONTENT)
+async def change_phone_number(
+    user: user_dependency, db: db_dependency, user_phone: UserPhone
+):
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Authentication failed",
+        )
+
+    user_model = db.query(User).filter(User.id == user.get("id")).first()
+
+    user_model.phone_number = user_phone.new_phone
 
     db.add(user_model)
     db.commit()
