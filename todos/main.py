@@ -16,7 +16,7 @@ app.mount("/static", StaticFiles(directory="./static"), name="static")
 
 
 @app.get("/")
-def test(request: Request):
+def index(request: Request):
     return templates.TemplateResponse("home.html", {"request": request})
 
 
