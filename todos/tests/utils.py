@@ -1,7 +1,6 @@
 import os
 import sys
 
-from fastapi import status
 from fastapi.testclient import TestClient
 import pytest
 from sqlalchemy import create_engine, text
@@ -11,8 +10,9 @@ from sqlalchemy.pool import StaticPool
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from database import Base
 from main import app
-from models import Todo
-from routers.todo import get_current_user, get_db
+from models import Todo, User
+from routers.auth import bcrypt_context
+
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./testdb.db"
 
@@ -36,20 +36,17 @@ def override_get_db():
 
 
 def override_get_current_user():
-    return {"username": "codingwithrobytest", "id": 1, "role": "admin"}
+    return {"username": "codingwithrobytest", "id": 1, "user_role": "admin"}
 
 
-app.dependency_overrides[get_db] = override_get_db
-app.dependency_overrides[get_current_user] = override_get_current_user
-
-client = TestClient(app=app)
+client = TestClient(app)
 
 
 @pytest.fixture
 def test_todo():
     todo = Todo(
-        title="Learn to code",
-        description="Need to learn everyday",
+        title="Learn to code!",
+        description="Need to learn everyday!",
         priority=5,
         complete=False,
         owner_id=1,
@@ -64,16 +61,21 @@ def test_todo():
         connection.commit()
 
 
-def test_read_all_authenticated(test_todo):
-    response = client.get("/")
-    assert response.status_code == status.HTTP_200_OK
-    assert response.json() == [
-        {
-            "id": 1,
-            "title": "Learn to code",
-            "description": "Need to learn everyday",
-            "priority": 5,
-            "complete": False,
-            "owner_id": 1,
-        }
-    ]
+@pytest.fixture
+def test_user():
+    user = User(
+        username="codingwithrobytest",
+        email="codingwithrobytest@email.com",
+        first_name="Eric",
+        last_name="Roby",
+        hashed_password=bcrypt_context.hash("testpassword"),
+        role="admin",
+        phone_number="(111) 111-1111",
+    )
+    db = TestingSessionLocal()
+    db.add(user)
+    db.commit()
+    yield user
+    with engine.connect() as connection:
+        connection.execute(text("DELETE FROM user;"))
+        connection.commit()

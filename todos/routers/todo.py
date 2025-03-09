@@ -56,9 +56,7 @@ async def read_todo(
     if todo_model is not None:
         return todo_model
 
-    raise HTTPException(
-        status_code=404, detail=f"Todo with id {todo_id} not found"
-    )
+    raise HTTPException(status_code=404, detail=f"Todo with id {todo_id} not found")
 
 
 @router.post("/todo", status_code=status.HTTP_201_CREATED)
@@ -92,9 +90,7 @@ async def update_todo(
     )
 
     if todo_model is None:
-        raise HTTPException(
-            status_code=404, detail=f"Todo with id of {todo_id} not found"
-        )
+        raise HTTPException(status_code=404, detail=f"Todo with id {todo_id} not found")
 
     todo_model.title = todo_request.title
     todo_model.description = todo_request.description
@@ -120,9 +116,7 @@ async def delete_todo(
     )
 
     if todo_model is None:
-        raise HTTPException(
-            status_code=404, detail=f"Todo with id of {todo_id} not found"
-        )
+        raise HTTPException(status_code=404, detail=f"Todo with id {todo_id} not found")
 
     db.query(Todo).filter(Todo.id == todo_id).delete()
     db.commit()
