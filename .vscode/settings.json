@@ -1,5 +1,6 @@
 {
-  "python.testing.pytestArgs": ["todos"],
+  "python.testing.cwd": "${workspaceFolder}/todos",
+  "python.testing.pytestArgs": ["tests"],
   "python.testing.unittestEnabled": false,
   "python.testing.pytestEnabled": true,
   "cSpell.words": [
