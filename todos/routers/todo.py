@@ -9,7 +9,7 @@ from .auth import get_current_user
 from database import SessionLocal
 from models import Todo
 
-router = APIRouter()
+router = APIRouter(prefix="/todo", tags=["todo"])
 
 
 def get_db():
