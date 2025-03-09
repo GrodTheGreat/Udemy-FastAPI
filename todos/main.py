@@ -1,3 +1,5 @@
+import os
+
 from fastapi import FastAPI, Request, status
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
@@ -11,7 +13,11 @@ app = FastAPI()
 Base.metadata.create_all(bind=engine)
 
 
-app.mount("/static", StaticFiles(directory="./static"), name="static")
+app.mount(
+    "/static",
+    StaticFiles(directory=os.path.join(os.path.dirname(__file__), "static")),
+    name="static",
+)
 
 
 @app.get("/")
