@@ -11,11 +11,22 @@
       type="text/css"
       href="{{ url_for('static', path='/css/bootstrap.css') }}"
     />
+
+    <script src="{{ url_for('static', path='/js/base.js') }}" defer></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TodoApp</title>
   </head>
   <body>
     {% block content %}{% endblock content %}
+    <script
+      src="{{ url_for('static', path='/js/jquery-slim.js') }}"
+      defer
+    ></script>
+    <script src="{{ url_for('static', path='/js/popper.js') }}" defer></script>
+    <script
+      src="{{ url_for('static', path='/js/bootstrap.js') }}"
+      defer
+    ></script>
   </body>
 </html>
