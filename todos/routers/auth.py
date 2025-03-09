@@ -1,8 +1,9 @@
 from datetime import datetime, timedelta, timezone
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
+from fastapi.templating import Jinja2Templates
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
@@ -47,7 +48,16 @@ def get_db():
 
 db_dependency = Annotated[Session, Depends(get_db)]
 
+templates = Jinja2Templates(directory="./templates")
 
+
+### Pages ###
+@router.get("/login-page")
+def render_login_page(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request})
+
+
+### Endpoints ###
 def authenticate_user(username: str, password: str, db: db_dependency):
     user = db.query(User).filter(User.username == username).first()
     if not user:
@@ -71,9 +81,7 @@ def create_access_token(
 
 async def get_current_user(token: Annotated[str, Depends(oauth2_bearer)]):
     try:
-        payload = jwt.decode(
-            token=token, key=SECRET_KEY, algorithms=[ALGORITHM]
-        )
+        payload = jwt.decode(token=token, key=SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
         user_id = payload.get("id")
         user_role = payload.get("role")
@@ -92,9 +100,7 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_bearer)]):
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
-async def create_user(
-    db: db_dependency, create_user_request: CreateUserRequest
-):
+async def create_user(db: db_dependency, create_user_request: CreateUserRequest):
     create_user_model = User(
         username=create_user_request.username,
         email=create_user_request.email,
